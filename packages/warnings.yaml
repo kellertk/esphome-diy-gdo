@@ -18,7 +18,7 @@ output:
   - platform: ledc
     id: warning_led_output
     pin: $warning_led_pin
-    inverted: true
+    inverted: $warning_led_inverted
   - platform: ledc
     id: warning_beeper_output
     pin: $warning_beeper_pin
