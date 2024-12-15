@@ -1,0 +1,37 @@
+---
+substitutions:
+  # Device strings
+  name: diy-gdo
+  friendly_name: DIY Garage Door Opener
+  garage_door_cover_name: Garage Door
+  garage_light_name: Garage Door Light
+  garage_lock_name: Garage Door Lock
+  garage_obstruction_name: Garage Door Obstruction
+  garage_door_close_warn_duration: 5s
+  garage_door_button_push_duration: 1s
+  open_garage_door_distance_margin_of_error: 0.1
+  range_sensor_debounce_time: 5s
+  # Pins
+  warning_beeper_pin: GPIO26
+  warning_led_pin: GPIO23
+  garage_door_cover_relay_pin: GPIO12
+  garage_door_light_relay_pin: GPIO14
+  garage_door_lock_relay_pin: GPIO27
+  status_led: GPIO2
+  status_led_inverted: "false"
+  sda: GPIO21
+  scl: GPIO22
+
+logger:
+
+packages:
+  core: !include packages/esp32-core.yaml
+  wifi: !include packages/wifi.yaml
+  warnings: !include packages/warnings.yaml
+  cover: !include packages/cover.yaml
+  light: !include packages/light.yaml
+  tof: !include packages/tof.yaml
+
+dashboard_import:
+  package_import_url: github://kellertk/esphome-diy-gdo/diy-gdo.yaml@main
+  import_full_config: false

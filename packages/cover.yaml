@@ -1,0 +1,72 @@
+---
+cover:
+  - platform: template
+    name: $garage_door_cover_name
+    id: garage_door_cover
+    device_class: garage
+    open_action:
+      - if:
+          condition:
+            lambda: return id(garage_door_cover).position == COVER_CLOSED;
+          then:
+            - button.press: garage_door_opener_button
+            - cover.template.publish:
+                id: garage_door_cover
+                current_operation: OPENING
+          else:
+            - script.execute: error_tone
+            - logger.log: "Garage door is not closed, cannot open"
+    close_action:
+      - if:
+          condition:
+            lambda: return id(garage_door_cover).position == COVER_OPEN;
+          then:
+            - button.press: pre_close_warning
+            - delay: $garage_door_close_warn_duration
+            - button.press: garage_door_opener_button
+            - cover.template.publish:
+                id: garage_door_cover
+                current_operation: CLOSING
+          else:
+            - script.execute: error_tone
+            - logger.log: "Garage door is not open, cannot close"
+    toggle_action:
+      - if:
+          condition:
+            lambda: return id(garage_door_cover).position == COVER_OPEN;
+          then:
+            - button.press: pre_close_warning
+            - delay: $garage_door_close_warn_duration
+            - cover.template.publish:
+                id: garage_door_cover
+                current_operation: CLOSING
+          else:
+            - cover.template.publish:
+                id: garage_door_cover
+                current_operation: OPENING
+      - button.press: garage_door_opener_button
+    stop_action:
+      - if:
+          condition:
+            not:
+              lambda: return id(garage_door_cover).current_operation == CoverOperation::COVER_OPERATION_IDLE;
+          then:
+            - button.press: garage_door_opener_button
+            - cover.template.publish:
+                id: garage_door_cover
+                current_operation: IDLE
+
+output:
+  - platform: gpio
+    id: garage_door_cover_relay
+    pin: $garage_door_cover_relay_pin
+
+button:
+  - platform: output
+    id: garage_door_opener_button
+    output: garage_door_cover_relay
+    duration: $garage_door_button_push_duration
+    internal: true
+    on_press:
+      then:
+        - script.execute: blink_led

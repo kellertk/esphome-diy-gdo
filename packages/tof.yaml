@@ -1,0 +1,70 @@
+---
+globals:
+  - id: gdo_err_margin
+    type: float
+    restore_value: yes
+    initial_value: $open_garage_door_distance_margin_of_error
+
+i2c:
+  - id: bus_a
+    sda: $sda
+    scl: $scl
+    scan: true
+
+sensor:
+  - platform: vl5310x
+    address: 0x29
+    name: "Garage Door Open Sensor"
+    update_interval: 500ms
+    long_range: true
+    id: garage_door_open_sensor
+    accuracy_decimals: 2
+    entity_category: diagnostic
+
+number:
+  - platform: template
+    name: Sensor calibration
+    id: open_garage_door_distance_from_ceiling
+    icon: mdi:ruler
+    entity_category: config
+    unit_of_measurement: m
+    device_class: distance
+    step: 0.01
+    max_value: 2.0
+    min_value: 0.1
+    optimistic: true
+    restore_value: true
+
+button:
+  - platform: template
+    id: calibrate_open_garage
+    name: Calibrate Open Garage Distance
+    on_press:
+      then:
+        - sensor.update: garage_door_open_sensor
+        - number.set: open_garage_door_distance_from_ceiling
+        - logger.log: "Calibrated distance: %f" % id(open_garage_door_distance_from_ceiling).state
+
+api:
+  actions:
+    - action: calibrate_open_garage
+      then:
+        - number.set:
+            id: open_garage_door_distance_from_ceiling
+            value: !lambda return id(garage_door_open_sensor).state;
+
+binary_sensor:
+  - platform: template
+    id: garage_door_range_sensor
+    internal: true
+    lambda: |-
+      float calibrated_distance = id(open_garage_door_distance_from_ceiling).state;
+      if (std::isnan(id(garage_door_open_sensor).state) || id(garage_door_open_sensor).state > calibrated_distance + id(gdo_err_margin)) {
+        return false;
+      } else if (id(range_sensor).state > calibrated_distance - id(gdo_err_margin)){
+        return true;
+      } else {
+        return {};
+      }
+    filters:
+      delayed_on_off: $range_sensor_debounce_time

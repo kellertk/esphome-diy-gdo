@@ -1,0 +1,12 @@
+---
+output:
+  - platform: gpio
+    id: garage_door_opener_light
+    pin: $garage_door_light_relay_pin
+
+button:
+  - platform: output
+    id: garage_door_opener_button
+    pin: $garage_door_cover_relay_pin
+    name: Garage Door Opener Light Button
+    duration: $garage_door_button_push_duration
