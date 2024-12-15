@@ -43,7 +43,9 @@ button:
       then:
         - sensor.update: garage_door_open_sensor
         - number.set: open_garage_door_distance_from_ceiling
-        - logger.log: "Calibrated distance: %f" % id(open_garage_door_distance_from_ceiling).state
+        - logger.log:
+            - format: "Calibrated distance: %f"
+              args: [ id(open_garage_door_distance_from_ceiling).state ]
 
 api:
   actions:
