@@ -15,7 +15,7 @@ sensor:
   - platform: vl53l0x
     address: 0x29
     name: "Garage Door Open Sensor"
-    update_interval: 500ms
+    update_interval: 2s
     long_range: true
     id: garage_door_open_sensor
     accuracy_decimals: 2
