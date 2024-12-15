@@ -15,7 +15,7 @@ sensor:
   - platform: vl53l0x
     address: 0x29
     name: "Garage Door Open Sensor"
-    update_interval: 2s
+    update_interval: 500ms
     long_range: true
     id: garage_door_open_sensor
     accuracy_decimals: 2
@@ -59,7 +59,8 @@ api:
 binary_sensor:
   - platform: template
     id: garage_door_range_sensor
-    internal: true
+    name: Garage Door Open
+    #internal: true
     lambda: |-
       float calibrated_distance = id(open_garage_door_distance_from_ceiling).state;
       if (std::isnan(id(garage_door_open_sensor).state) || id(garage_door_open_sensor).state > calibrated_distance + id(gdo_err_margin)) {
@@ -71,3 +72,15 @@ binary_sensor:
       }
     filters:
       delayed_on_off: $range_sensor_debounce_time
+    on_state:
+      if:
+        condition:
+          - binary_sensor.is_on: garage_door_range_sensor
+        then:
+            - cover.control:
+                id: garage_door_cover
+                state: OPEN
+        else:
+            - cover.control:
+                id: garage_door_cover
+                state: CLOSED

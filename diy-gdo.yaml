@@ -19,24 +19,59 @@ substitutions:
   garage_door_lock_relay_pin: GPIO27
   status_led: GPIO2
   status_led_inverted: "false"
+  warning_led_inverted: "false"
   sda: GPIO21
   scl: GPIO22
 
 logger:
+  logs:
+    vl53l0x: INFO
+    #sensor: INFO
 
 packages:
-  remote_packages:
-    url: https://github.com/kellertk/esphome-diy-gdo
-    ref: main
-    refresh: 5min
-    files:
-      - packages/esp32-core.yaml
-      - packages/wifi.yaml
-      - packages/warnings.yaml
-      - packages/cover.yaml
-      - packages/light.yaml
-      - packages/tof.yaml
+#  remote_packages:
+#    url: https://github.com/kellertk/esphome-diy-gdo
+#    ref: main
+#    refresh: 1min
+#    files:
+#      - packages/esp32-core.yaml
+#      - packages/wifi.yaml
+#      - packages/warnings.yaml
+#      - packages/cover.yaml
+#      - packages/light.yaml
+#      - packages/tof.yaml
+  core: !include gdo/packages/esp32-core.yaml
+  wifi: !include gdo/packages/wifi.yaml
+  warnings: !include gdo/packages/warnings.yaml
+  cover: !include gdo/packages/cover.yaml
+  light: !include gdo/packages/light.yaml
+  tof: !include gdo/packages/tof.yaml
 
 dashboard_import:
   package_import_url: github://kellertk/esphome-diy-gdo/diy-gdo.yaml@main
   import_full_config: false
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "w12cHWSFp8CCmv4JHLp3Dj6vzm64Z61JOcYyI7Z51r0="
+
+ota:
+  - platform: esphome
+    password: "e93e2bb1726ad9c0348f7a2ae355b403"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  domain: .iot.tompkel.net
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Garage-Door-Opener"
+    password: "Dai6pi08GBFO"
+    manual_ip:
+      static_ip: 10.192.4.1
+      subnet: 255.255.255.0
+      gateway: 10.192.4.1
+
+web_server:
+  ota: False
