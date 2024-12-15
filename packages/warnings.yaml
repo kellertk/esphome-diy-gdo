@@ -18,6 +18,7 @@ output:
   - platform: gpio
     id: warning_led_output
     pin: $warning_led_pin
+    inverted: true
   - platform: ledc
     id: warning_beeper_output
     pin: $warning_beeper_pin
@@ -29,7 +30,6 @@ light:
     effects:
       - strobe:
     internal: true
-    inverted: true
     initial_state: OFF
 
 rtttl:
