@@ -27,10 +27,10 @@ light:
   - id: warning_led
     platform: monochromatic
     output: warning_led_output
-    effects:
-      - strobe:
     internal: true
     initial_state: false
+    effects:
+      - strobe:
 
 rtttl:
   output: warning_beeper_output
