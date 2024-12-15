@@ -24,7 +24,8 @@ substitutions:
   scl: GPIO22
 
 logger:
-  vl53l0x: INFO
+  logs:
+    vl53l0x: INFO
 
 packages:
   remote_packages:
