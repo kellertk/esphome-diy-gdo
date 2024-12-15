@@ -7,6 +7,6 @@ output:
 button:
   - platform: output
     id: garage_door_opener_button
-    pin: $garage_door_cover_relay_pin
+    output: garage_door_opener_light
     name: Garage Door Opener Light Button
     duration: $garage_door_button_push_duration

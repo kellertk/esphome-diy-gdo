@@ -9,7 +9,7 @@ substitutions:
   garage_obstruction_name: Garage Door Obstruction
   garage_door_close_warn_duration: 5s
   garage_door_button_push_duration: 1s
-  open_garage_door_distance_margin_of_error: 0.1
+  open_garage_door_distance_margin_of_error: "0.1"
   range_sensor_debounce_time: 5s
   # Pins
   warning_beeper_pin: GPIO26
