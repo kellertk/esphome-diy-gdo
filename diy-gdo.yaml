@@ -25,12 +25,17 @@ substitutions:
 logger:
 
 packages:
-  core: !include packages/esp32-core.yaml
-  wifi: !include packages/wifi.yaml
-  warnings: !include packages/warnings.yaml
-  cover: !include packages/cover.yaml
-  light: !include packages/light.yaml
-  tof: !include packages/tof.yaml
+  remote_packages:
+    url: https://github.com/kellertk/esphome-diy-gdo
+    ref: main
+    refresh: 5min
+    files:
+      - packages/esp32-core.yaml
+      - packages/wifi.yaml
+      - packages/warnings.yaml
+      - packages/cover.yaml
+      - packages/light.yaml
+      - packages/tof.yaml
 
 dashboard_import:
   package_import_url: github://kellertk/esphome-diy-gdo/diy-gdo.yaml@main
