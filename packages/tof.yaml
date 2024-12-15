@@ -12,7 +12,7 @@ i2c:
     scan: true
 
 sensor:
-  - platform: vl5310x
+  - platform: vl53l0x
     address: 0x29
     name: "Garage Door Open Sensor"
     update_interval: 500ms
