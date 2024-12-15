@@ -19,6 +19,7 @@ substitutions:
   garage_door_lock_relay_pin: GPIO27
   status_led: GPIO2
   status_led_inverted: "false"
+  warning_led_inverted: "false"
   sda: GPIO21
   scl: GPIO22
 
