@@ -30,7 +30,7 @@ light:
     effects:
       - strobe:
     internal: true
-    initial_state: OFF
+    initial_state: false
 
 rtttl:
   output: warning_beeper_output
