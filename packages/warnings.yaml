@@ -28,7 +28,6 @@ light:
     platform: monochromatic
     output: warning_led_output
     internal: true
-    initial_state: false
     effects:
       - strobe:
 
