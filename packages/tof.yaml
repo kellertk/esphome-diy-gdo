@@ -14,10 +14,10 @@ i2c:
 sensor:
   - platform: vl53l0x
     address: 0x29
-    name: "Garage Door Open Sensor"
+    name: "Garage Door Range Sensor"
     update_interval: 500ms
     long_range: true
-    id: garage_door_open_sensor
+    id: garage_door_range_sensor
     accuracy_decimals: 2
     entity_category: diagnostic
 
@@ -43,7 +43,7 @@ button:
       then:
         - number.set:
             id: open_garage_door_distance_from_ceiling
-            value: !lambda return id(garage_door_open_sensor).state;
+            value: !lambda return id(garage_door_range_sensor).state;
         - logger.log:
               format: "Calibrated distance: %f"
               args: [ id(open_garage_door_distance_from_ceiling).state ]
@@ -54,33 +54,46 @@ api:
       then:
         - number.set:
             id: open_garage_door_distance_from_ceiling
-            value: !lambda return id(garage_door_open_sensor).state;
+            value: !lambda return id(garage_door_range_sensor).state;
 
 binary_sensor:
   - platform: template
-    id: garage_door_range_sensor
-    name: Garage Door Open
-    #internal: true
+    id: garage_door_open_state
+    name: Garage Door Open State
+    internal: true
     lambda: |-
       float calibrated_distance = id(open_garage_door_distance_from_ceiling).state;
-      if (std::isnan(id(garage_door_open_sensor).state) || id(garage_door_open_sensor).state > calibrated_distance + id(gdo_err_margin)) {
+      if (std::isnan(id(garage_door_range_sensor).state) ||
+         (id(garage_door_range_sensor).state > calibrated_distance - id(gdo_err_margin) &&
+          id(garage_door_range_sensor).state < calibrated_distance + id(gdo_err_margin))
+      ) {
         return false;
-      } else if (id(garage_door_open_sensor).state > calibrated_distance - id(gdo_err_margin)){
-        return true;
       } else {
-        return {};
+        return true;
       }
     filters:
       delayed_on_off: $range_sensor_debounce_time
     on_state:
       if:
         condition:
-          - binary_sensor.is_on: garage_door_range_sensor
+          lambda: 'return id(garage_door_open_state).state;'
         then:
-            - cover.control:
-                id: garage_door_cover
-                state: OPEN
+          - logger.log:
+              format: "Garage door is open"
+              level: INFO
+          - cover.template.publish:
+              id: garage_door_cover
+              state: OPEN
+          - cover.template.publish:
+              id: garage_door_cover
+              current_operation: IDLE
         else:
-            - cover.control:
-                id: garage_door_cover
-                state: CLOSED
+          - logger.log:
+              format: "Garage door is closed"
+              level: INFO
+          - cover.template.publish:
+              id: garage_door_cover
+              state: CLOSED
+          - cover.template.publish:
+              id: garage_door_cover
+              current_operation: IDLE

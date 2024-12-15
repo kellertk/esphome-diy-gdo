@@ -27,15 +27,15 @@ light:
   - id: warning_led
     platform: binary
     output: warning_led_output
-    internal: false
+    internal: true
     effects:
       - strobe:
-          name: blinking_500x500
+          name: blinking
           colors:
             - state: true
-              duration: 500ms
+              duration: 100ms
             - state: false
-              duration: 500ms
+              duration: 100ms
 
 rtttl:
   output: warning_beeper_output
@@ -53,7 +53,10 @@ button:
     name: Pre-close warning
     on_press:
       then:
-        - light.turn_on: warning_led
+        - light.control:
+            id: warning_led
+            state: true
+            effect: blinking
         - button.press: warning_tone
         - delay: $garage_door_close_warn_duration
         - light.turn_off: warning_led

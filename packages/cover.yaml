@@ -4,6 +4,12 @@ cover:
     name: $garage_door_cover_name
     id: garage_door_cover
     device_class: garage
+    lambda: |-
+      if (id(garage_door_open_state).state) {
+        return COVER_OPEN;
+      } else {
+        return COVER_CLOSED;
+      }
     open_action:
       - if:
           condition:
