@@ -27,6 +27,10 @@ logger:
   logs:
     vl53l0x: INFO
     sensor: INFO
+  on_message:
+    level: WARN
+    then:
+      - lambda: if (std::string(tag) == "vl53l0x") id(restart_button).press();
 
 packages:
   remote_packages:
