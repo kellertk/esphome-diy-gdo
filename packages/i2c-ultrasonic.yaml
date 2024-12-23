@@ -1,4 +1,3 @@
-# Don't use this. There are bugs in esphome's vl53l0x implementation that make it unusable.
 ---
 globals:
   - id: gdo_err_margin
@@ -13,12 +12,10 @@ i2c:
     scan: true
 
 sensor:
-  - platform: vl53l0x
-    address: 0x29
-    name: "Garage Door Range Sensor"
-    update_interval: 1s
-    long_range: true
+  - platform: zio_ultrasonic
+    update_interval: 30s
     id: garage_door_range_sensor
+    name: "Garage Door Range Sensor"
     accuracy_decimals: 2
     entity_category: diagnostic
 

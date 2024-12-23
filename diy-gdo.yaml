@@ -43,7 +43,7 @@ packages:
       - packages/warnings.yaml
       - packages/cover.yaml
       - packages/light.yaml
-      - packages/tof.yaml
+      - packages/i2c-ultrasonic.yaml
 #  core: !include packages/esp32-core.yaml
 #  wifi: !include packages/wifi.yaml
 #  warnings: !include packages/warnings.yaml
