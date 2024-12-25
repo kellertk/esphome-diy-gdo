@@ -10,12 +10,11 @@ substitutions:
   garage_door_close_warn_duration: 5s
   garage_door_button_push_duration: 1s
   open_garage_door_distance_margin_of_error: "0.1"
-  range_sensor_debounce_time: 2s
   # Pins
-  warning_beeper_pin: GPIO26
+  warning_beeper_pin: GPIO19
   warning_led_pin: GPIO23
-  garage_door_cover_relay_pin: GPIO12
-  garage_door_light_relay_pin: GPIO14
+  garage_door_cover_relay_pin: GPIO14
+  garage_door_light_relay_pin: GPIO12
   garage_door_lock_relay_pin: GPIO27
   status_led: GPIO2
   status_led_inverted: "false"
@@ -24,28 +23,22 @@ substitutions:
   scl: GPIO22
 
 logger:
+  level: DEBUG
   logs:
-    vl53l0x: INFO
     sensor: INFO
 
 packages:
   remote_packages:
     url: https://github.com/kellertk/esphome-diy-gdo
     ref: main
-    refresh: 1min
+    refresh: 10min
     files:
-      - packages/esp32-core.yaml
-      - packages/wifi.yaml
-      - packages/warnings.yaml
-      - packages/cover.yaml
-      - packages/light.yaml
-      - packages/tof.yaml
-#  core: !include packages/esp32-core.yaml
-#  wifi: !include packages/wifi.yaml
-#  warnings: !include packages/warnings.yaml
-#  cover: !include packages/cover.yaml
-#  light: !include packages/light.yaml
-#  tof: !include packages/tof.yaml
+      - gdo/packages/esp32-core.yaml
+      - gdo/packages/wifi.yaml
+      - gdo/packages/warnings.yaml
+      - gdo/packages/cover.yaml
+      - gdo/packages/light.yaml
+      - gdo/packages/i2c-ultrasonic.yaml
 
 dashboard_import:
   package_import_url: github://kellertk/esphome-diy-gdo/diy-gdo.yaml@main
