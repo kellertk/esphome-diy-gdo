@@ -17,6 +17,7 @@ This project is designed to be used with [Home Assistant](https://www.home-assis
 ## Parts
 * ESP32
 * Zio Qwiic Ultrasonic Distance Sensor
+* Lux sensor to detect if the light is on or off
 * As many relays or MOSFETs as you have buttons on your remote
 * Buzzer
 * LEDs
