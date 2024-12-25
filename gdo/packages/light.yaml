@@ -1,31 +1,35 @@
----
-output:
-  - platform: gpio
-    id: garage_door_opener_light
-    pin: $garage_door_light_relay_pin
-
 button:
   - platform: output
     id: garage_door_opener_light_button
-    output: garage_door_opener_light
-    name: Garage Door Opener Light Button
+    output: garage_door_opener_relay
     duration: $garage_door_button_push_duration
+  - platform: template
+    id: calibrate_garage_door_light_sensor
+    name: Calibrate Garage Door Light Sensor
+    on_press:
+      then:
+        - number.set:
+            id: garage_door_light_sensor_calibration
+            value: !lambda return id(garage_door_light_sensor_calculated_lux).state;
+        - logger.log:
+              format: "Calibrated light sensor: %f"
+              args: [ id(garage_door_light_sensor_calibration).state ]
 
-i2c:
-  - id: bus_a
-    sda: $sda
-    scl: $scl
-    scan: true
+output:
+  - platform: gpio
+    id: garage_door_opener_relay
+    pin: $garage_door_light_relay_pin
 
 sensor:
   - platform: tsl2591
-    name: "Garage Door Light Sensor"
-    id: garage_door_light_sensor
     address: 0x29
-    update_interval: 2s
+    update_interval: 1s
     gain: low
     integration_time: 300ms
-    entity_category: diagnostic
+    calculated_lux:
+      id: garage_door_light_sensor_calculated_lux
+      name: "Garage Door Light Sensor Lux"
+      entity_category: diagnostic
 
 number:
   - platform: template
@@ -41,40 +45,18 @@ number:
     optimistic: true
     restore_value: true
 
-button:
-  - platform: template
-    id: calibrate_garage_door_light_sensor
-    name: Calibrate Garage Door Light Sensor
-    on_press:
-      then:
-        - number.set:
-            id: garage_door_light_sensor_calibration
-            value: !lambda return id(garage_door_light_sensor).state;
-        - logger.log:
-              format: "Calibrated light sensor: %f"
-              args: [ id(garage_door_light_sensor_calibration).state ]
-
-api:
-  actions:
-    - action: calibrate_garage_door_light_sensor
-      then:
-        - number.set:
-            id: garage_door_light_sensor_calibration
-            value: !lambda return id(garage_door_light_sensor).state;
-        - logger.log:
-              format: "Calibrated light sensor: %f"
-              args: [ id(garage_door_light_sensor_calibration).state ]
-
 binary_sensor:
   - platform: template
     id: garage_door_light_state
-    name: Garage Door Light State
-    internal: true
+    name: Garage Door Light
+    device_class: light
     lambda: |-
       float calibrated_light = id(garage_door_light_sensor_calibration).state;
-      float current_light = id(garage_door_light_sensor).calculated_lux;
+      float current_light = id(garage_door_light_sensor_calculated_lux).state;
       // 100 lx buffer to account for the bulb aging
       return current_light >= calibrated_light - 100;
+    filters:
+      - delayed_on_off: 2s
     on_state:
       - if:
           condition:
@@ -83,45 +65,7 @@ binary_sensor:
             - logger.log:
                 format: "Garage door light is on"
                 level: INFO
-            - light.template.publish:
-                id: garage_door_opener_light
-                state: ON
-        else:
-            - logger.log:
-                format: "Garage door light is off"
-                level: INFO
-            - light.template.publish:
-                id: garage_door_opener_light
-                state: OFF
-
-light:
-  - platform: template
-    name: $garage_light_name
-    id: garage_door_opener_light
-    lambda: |-
-      if (id(garage_door_light_state).state) {
-        return true;
-      } else {
-        return false;
-      }
-    on_turn_on:
-      - if:
-          condition:
-            lambda: return id(garage_door_light_state).state;
-          then:
-            - button.press: garage_door_opener_light_button
           else:
-            - logger.log:
-                format: "Garage door light is already on, cannot turn on"
-            - script.execute: error_tone
-    on_turn_off:
-      - if:
-          condition:
-            not:
-              lambda: return id(garage_door_light_state).state;
-          then:
-            - button.press: garage_door_opener_light_button
-          else:
-            - logger.log:
-                format: "Garage door light is already off, cannot turn off"
-            - script.execute: error_tone
+              - logger.log:
+                  format: "Garage door light is off"
+                  level: INFO

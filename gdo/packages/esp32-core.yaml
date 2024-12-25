@@ -14,6 +14,11 @@ esphome:
           id: device_id
           state: !lambda 'return get_mac_address();'
 
+i2c:
+  - id: bus_a
+    sda: $sda
+    scl: $scl
+    scan: true
 
 esp32:
   board: esp32dev
