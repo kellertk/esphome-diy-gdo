@@ -9,14 +9,14 @@ This project is designed to be used with [Home Assistant](https://www.home-assis
 
 ## Features
 * Open and close the garage door using Home Assistant
-* Monitor the door position with a VL53L0X time-of-flight sensor. This is built
-  with one sensor to detect when the door is open and the close state is
+* Monitor the door position with a range sensor. This is built
+  with only one sensor to detect when the door is open and the close state is
   assumed, but you could add a second, sensor to be sure the door is closed.
 * Flashing lights and buzzer for safety
 
 ## Parts
 * ESP32
-* VL53L0X time-of-flight sensor
+* Zio Qwiic Ultrasonic Distance Sensor
 * As many relays or MOSFETs as you have buttons on your remote
 * Buzzer
 * LEDs
