@@ -26,6 +26,7 @@ logger:
   level: DEBUG
   logs:
     sensor: INFO
+    tsl2591: INFO
 
 packages:
   remote_packages:
