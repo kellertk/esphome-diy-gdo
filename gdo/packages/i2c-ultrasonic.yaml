@@ -34,7 +34,7 @@ sensor:
 
 number:
   - platform: template
-    name: Sensor calibration
+    name: Distance sensor calibration
     id: open_garage_door_distance_from_ceiling
     icon: mdi:ruler
     entity_category: config
