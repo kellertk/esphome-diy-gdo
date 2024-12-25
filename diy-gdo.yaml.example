@@ -33,12 +33,12 @@ packages:
     ref: main
     refresh: 10min
     files:
-      - gdo/packages/esp32-core.yaml
-      - gdo/packages/wifi.yaml
-      - gdo/packages/warnings.yaml
-      - gdo/packages/cover.yaml
-      - gdo/packages/light.yaml
-      - gdo/packages/i2c-ultrasonic.yaml
+      - packages/esp32-core.yaml
+      - packages/wifi.yaml
+      - packages/warnings.yaml
+      - packages/cover.yaml
+      - packages/light.yaml
+      - packages/i2c-ultrasonic.yaml
 
 dashboard_import:
   package_import_url: github://kellertk/esphome-diy-gdo/diy-gdo.yaml@main
