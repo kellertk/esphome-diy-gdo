@@ -1,6 +1,7 @@
 button:
   - platform: output
     id: garage_door_opener_light_button
+    name: $garage_light_name
     output: garage_door_opener_relay
     duration: $garage_door_button_push_duration
   - platform: template
@@ -48,7 +49,7 @@ number:
 binary_sensor:
   - platform: template
     id: garage_door_light_state
-    name: Garage Door Light
+    name: $garage_light_name
     device_class: light
     lambda: |-
       float calibrated_light = id(garage_door_light_sensor_calibration).state;
