@@ -44,6 +44,7 @@ button:
   - platform: template
     id: calibrate_open_garage
     name: Calibrate Open Garage Distance
+    entity_category: config
     on_press:
       then:
         - number.set:
