@@ -1,0 +1,11 @@
+---
+output:
+  - platform: gpio
+    id: garage_door_lock_relay
+    pin: $garage_door_lock_relay_pin
+
+lock:
+  - platform: output
+    id: garage_door_lock
+    name: $garage_lock_name
+    output: garage_door_lock_relay

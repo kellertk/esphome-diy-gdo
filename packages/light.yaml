@@ -1,3 +1,4 @@
+---
 button:
   - platform: output
     id: garage_door_opener_light_button

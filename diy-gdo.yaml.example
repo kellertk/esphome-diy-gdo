@@ -40,6 +40,7 @@ packages:
       - packages/cover.yaml
       - packages/light.yaml
       - packages/i2c-ultrasonic.yaml
+      - packages/lock.yaml
 
 dashboard_import:
   package_import_url: github://kellertk/esphome-diy-gdo/diy-gdo.yaml@main
