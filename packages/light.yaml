@@ -28,7 +28,7 @@ sensor:
   - platform: tsl2591
     address: 0x29
     update_interval: 1s
-    gain: low
+    gain: auto
     integration_time: 300ms
     calculated_lux:
       id: garage_door_light_sensor_calculated_lux
