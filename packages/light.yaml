@@ -67,8 +67,6 @@ binary_sensor:
       float current_light = id(garage_door_light_sensor_calculated_lux).state;
       // 100 lx buffer to account for the bulb aging
       return current_light >= calibrated_light - 100;
-    filters:
-      - delayed_on_off: 2s
     on_state:
       - if:
           condition:
