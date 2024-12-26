@@ -3,6 +3,7 @@ button:
     id: garage_door_opener_light_button
     name: $garage_light_name
     output: garage_door_opener_relay
+    icon: "mdi:light-switch"
     duration: $garage_door_button_push_duration
   - platform: template
     id: calibrate_garage_door_light_sensor
