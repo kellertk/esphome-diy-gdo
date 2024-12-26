@@ -28,12 +28,19 @@ sensor:
   - platform: tsl2591
     address: 0x29
     update_interval: 1s
-    gain: auto
+    gain: 1x
     integration_time: 300ms
     calculated_lux:
       id: garage_door_light_sensor_calculated_lux
       name: "Garage Door Light Sensor Lux"
       entity_category: diagnostic
+      filters:
+        - lambda: |-
+            if (std::isnan(x)) {
+              return 0.0;
+            } else {
+              return x;
+            }
 
 number:
   - platform: template
