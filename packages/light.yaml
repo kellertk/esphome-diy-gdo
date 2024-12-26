@@ -36,7 +36,7 @@ sensor:
       entity_category: diagnostic
       filters:
         - lambda: |-
-            if (std::isnan(x)) {
+            if (std::isnan(x) || std::isinf(x)) {
               return 0.0;
             } else {
               return x;
