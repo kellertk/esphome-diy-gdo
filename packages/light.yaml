@@ -34,6 +34,7 @@ sensor:
       id: garage_door_light_sensor_calculated_lux
       name: "Garage Door Light Sensor Lux"
       entity_category: diagnostic
+      accuracy_decimals: 0
       filters:
         - lambda: |-
             if (std::isnan(x) || std::isinf(x)) {
